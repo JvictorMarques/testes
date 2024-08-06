@@ -1,0 +1,30 @@
+image:
+  name: node:18.4.0
+
+definitions:
+  steps:
+    - steps: &dependencies
+        name: Install dependencies
+        cache:
+          - node
+        script:
+          - npm install
+        
+    - step: &lint
+        name: Lint
+        script:
+          - npm install --save-dev eslint
+          - npm run lint
+        
+    - step: &test
+        name: Tests
+        script:
+          - npm install --save-dev jest
+          - npm run test
+    
+  pipelines:
+    pull-requests:
+      '**'
+        - step: *dependencies
+        - step: *lint
+        - step: *test
